@@ -30,14 +30,15 @@ class FacebookFeed_Item extends DataObject{
 		"Author" => "Varchar(244)",
 		"Description" => "HTMLText",
 		"Link" => "Varchar(244)",
-		"Date" => "Date"
+		"Date" => "Date",
+		"KeepOnTop" => "Boolean"
 	);
 
 	static $indexes = array(
 		"UID" => true
 	);
 
-	static $default_sort = "\"Date\" DESC";
+	static $default_sort = "\"KeepOnTop\" DESC, \"Date\" DESC";
 
 }
 
