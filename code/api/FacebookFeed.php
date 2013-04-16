@@ -24,14 +24,14 @@
 class FacebookFeed_Item extends DataObject{
 
 	static $db = array(
+		"KeepOnTop" => "Boolean",
 		"Hide" => "Boolean",
 		"UID" => "varchar(32)",
 		"Title" => "varchar(255)",
 		"Author" => "Varchar(244)",
 		"Description" => "HTMLText",
 		"Link" => "Varchar(244)",
-		"Date" => "Date",
-		"KeepOnTop" => "Boolean"
+		"Date" => "Date"
 	);
 
 	static $indexes = array(
