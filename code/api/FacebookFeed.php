@@ -21,7 +21,7 @@
  *
  **/
 
-class FacebookFeed_Item extends DataObject{
+class FacebookFeed_Item extends DataObject {
 
 	static $db = array(
 		"KeepOnTop" => "Boolean",
@@ -34,12 +34,24 @@ class FacebookFeed_Item extends DataObject{
 		"Date" => "Date"
 	);
 
+	static $has_one = array(
+		'Page' => 'Page'
+	);
+
 	static $indexes = array(
 		"UID" => true
 	);
 
 	static $default_sort = "\"KeepOnTop\" DESC, \"Date\" DESC";
 
+	function requireDefaultRecords() {
+		$items = DataObject::get('FacebookFeed_Item', 'PageID = 0');
+		if($items) {
+			$page = DataObject::get_one('HomePage');
+			DB::query("UPDATE FacebookFeed_Item SET PageID = $page->ID WHERE PageID = 0");
+			DB::alteration_message('Facebook feeds updated and linked to the home page.', 'changed');
+		}
+	}
 }
 
 
