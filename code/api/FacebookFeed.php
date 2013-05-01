@@ -58,13 +58,10 @@ class FacebookFeed_Item extends DataObject {
 class FacebookFeed_Item_Communicator extends RestfulServer {
 
 	/**
-	 * @param String: https://www.facebook.com/feeds/page.php?format=rss20&id=xxxxxxx
-	 * @param Int $maxnumber - items retrieved
-	 * @param String
-	 * @returns DataObjectSet
+	 * cd 
 	 **/
 
-	function fetchFBFeed($url, $maxnumber = 1, $timeFormat = 'Y-m-d') {
+	function fetchFBFeed($url, $maxnumber = 1, $pageID = 0, $timeFormat = 'Y-m-d') {
 	/* The following line is absolutely necessary to read Facebook feeds. Facebook will not recognize PHP as a browser and therefore won't fetch anything. So we define a browser here */
 		ini_set('user_agent', 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9.1.3) Gecko/20090824 Firefox/3.5.3');
 		$updates = simplexml_load_file($url);  //Load feed with simplexml
@@ -94,6 +91,7 @@ class FacebookFeed_Item_Communicator extends RestfulServer {
 					$FacebookFeed_Item->Author = (string) $fbUpdate->author;
 					$FacebookFeed_Item->Link = (string) $fbUpdate->link;
 					$FacebookFeed_Item->Description = $this->stripUnsafe((string) $desc);
+					$FacebookFeed_Item->PageID = $pageID;
 					$FacebookFeed_Item->write();
 					$maxnumber--;
 				}
