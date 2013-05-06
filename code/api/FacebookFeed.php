@@ -42,7 +42,15 @@ class FacebookFeed_Item extends DataObject {
 		"UID" => true
 	);
 
+	static $casting = array(
+		'DescriptionWithShortLinks' => 'HTMLText'
+	);
+
 	static $default_sort = "\"KeepOnTop\" DESC, \"Date\" DESC";
+
+	function DescriptionWithShortLinks() {
+		return preg_replace("#\b((http|https|ftp)://(\S*?\.\S*?))(\s|\;|\)|\]|\[|\{|\}|,|\"|'|:|\<|$|\.\s)#ie", "'<a href=\"$1\" target=\"_blank\">click here</a>$4'", $this->Description);
+	}
 
 	function requireDefaultRecords() {
 		$items = DataObject::get('FacebookFeed_Item', 'PageID = 0');
