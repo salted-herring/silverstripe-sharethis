@@ -21,6 +21,8 @@
  *
  **/
 
+require_once('simple_html_dom.php');
+
 class FacebookFeed_Item extends DataObject {
 
 	static $db = array(
@@ -49,7 +51,13 @@ class FacebookFeed_Item extends DataObject {
 	static $default_sort = "\"KeepOnTop\" DESC, \"Date\" DESC";
 
 	function DescriptionWithShortLinks() {
-		return preg_replace("#\b((http|https|ftp)://(\S*?\.\S*?))(\s|\;|\)|\]|\[|\{|\}|,|\"|'|:|\<|$|\.\s)#ie", "'<a href=\"$1\" target=\"_blank\">click here</a>$4'", $this->Description);
+		$html = str_get_html($this->Description);
+		foreach($html->find('text') as $element) {
+		    if(! in_array($element->parent()->tag, array('a', 'img'))) {
+		        $element->innertext = preg_replace("#((http|https|ftp)://(\S*?\.\S*?))(\s|\;|\)|\]|\[|\{|\}|,|\"|'|:|\<|$|\.\s)#ie", "'<a href=\"$1\" target=\"_blank\">click here</a>$4'", $element->innertext);
+			}
+		}
+		return $html;
 	}
 
 	function requireDefaultRecords() {
