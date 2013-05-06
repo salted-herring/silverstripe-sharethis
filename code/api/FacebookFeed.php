@@ -54,7 +54,8 @@ class FacebookFeed_Item extends DataObject {
 		$html = str_get_html($this->Description);
 		foreach($html->find('text') as $element) {
 		    if(! in_array($element->parent()->tag, array('a', 'img'))) {
-		        $element->innertext = preg_replace("#((http://|https://|ftp://|www)(\S*?\.\S*?))(\s|\;|\)|\]|\[|\{|\}|,|\"|'|:|\<|$|\.\s)#ie", "'<a href=\"$1\" target=\"_blank\">click here</a>$4'", $element->innertext);
+		    	$element->innertext = preg_replace("#(www(\S*?\.\S*?))(\s|\;|\)|\]|\[|\{|\}|,|\"|'|:|\<|$|\.\s)#ie", "'http://$1$4'", $element->innertext);
+		        $element->innertext = preg_replace("#((http|https|ftp)://(\S*?\.\S*?))(\s|\;|\)|\]|\[|\{|\}|,|\"|'|:|\<|$|\.\s)#ie", "'<a href=\"$1\" target=\"_blank\">click here</a>$4'", $element->innertext);
 			}
 		}
 		return $html;
