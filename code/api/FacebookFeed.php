@@ -84,7 +84,7 @@ class FacebookFeed_Page extends DataObject {
 			}
 		}
 		if(count($feedIDs)) {
-			$dos = DataObject::get(
+			return DataObject::get(
 				"FacebookFeed_Item",
 				"\"FacebookFeed_PageID\" IN (".implode(",", $feedIDs).") AND \"Hide\" = 0",
 				null,
