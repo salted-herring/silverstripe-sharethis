@@ -39,7 +39,6 @@ class FacebookFeed_Page extends DataObject {
 	);
 
 	public function getCMSFields(){
-		$this->Fetch();
 		$fields = parent::getCMSFields();
 		$fields->addFieldToTab(
 			"Root.Main",
@@ -87,7 +86,7 @@ class FacebookFeed_Page extends DataObject {
 		if(count($feedIDs)) {
 			return DataObject::get(
 				"FacebookFeed_Item",
-				"\"FacebookFeed_PageID\" = IN (".implode(",", $feedIDs).") AND \"Hide\" = 0",
+				"\"FacebookFeed_PageID\" IN (".implode(",", $feedIDs).") AND \"Hide\" = 0",
 				null,
 				"",
 				$limit
