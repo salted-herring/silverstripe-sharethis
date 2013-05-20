@@ -84,7 +84,7 @@ class FacebookFeed_Page extends DataObject {
 			}
 		}
 		if(count($feedIDs)) {
-			return DataObject::get(
+			$dos = DataObject::get(
 				"FacebookFeed_Item",
 				"\"FacebookFeed_PageID\" IN (".implode(",", $feedIDs).") AND \"Hide\" = 0",
 				null,
@@ -182,6 +182,7 @@ class FacebookFeed_Item_Communicator extends RestfulServer {
 	/* The following line is absolutely necessary to read Facebook feeds.
 	 * Facebook will not recognize PHP as a browser and therefore won't fetch anything.
 	 * So we define a browser here */
+	 ini_set('user_agent', 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9.1.3) Gecko/20090824 Firefox/3.5.3');
 		$updates = @simplexml_load_file($url);  //Load feed with simplexml
 		if($updates){
 			foreach ( $updates->channel->item as $fbUpdate ) {
