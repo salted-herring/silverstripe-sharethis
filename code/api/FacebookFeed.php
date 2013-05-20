@@ -65,20 +65,23 @@ class FacebookFeed_Page extends DataObject {
 		);
 		$pages = $this->Pages();
 		if($pages && $pages->count()) {
+			$links = array();
 			foreach($pages as $page) {
 				$links[] = "<li><a href=\"".$page->Link("updatefb")."\">".$page->Title."</a></li>";
 			}
-			$fields->addFieldToTab(
-				"Root.Pages",
-				new LiteralField(
-					"LinksToCheck",
-					"<p>
-						Choose the links below to view update data:
-					<ol>
-						".implode("", $links)."
-					</ol>"
-				)
-			);
+			if(count($links)) {
+				$fields->addFieldToTab(
+					"Root.Pages",
+					new LiteralField(
+						"LinksToCheck",
+						"<p>
+							Choose the links below to view your facebook feed:
+						<ol>
+							".implode("", $links)."
+						</ol>"
+					)
+				);
+			}
 		}
 		return $fields;
 	}
@@ -177,15 +180,6 @@ class FacebookFeed_Item extends DataObject {
 			}
 		}
 		return $html;
-	}
-
-	function requireDefaultRecords() {
-		$items = DataObject::get('FacebookFeed_Item', 'PageID = 0');
-		if($items) {
-			$page = DataObject::get_one('HomePage');
-			DB::query("UPDATE FacebookFeed_Item SET PageID = $page->ID WHERE PageID = 0");
-			DB::alteration_message('Facebook feeds updated and linked to the home page.', 'changed');
-		}
 	}
 }
 
