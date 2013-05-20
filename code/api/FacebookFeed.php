@@ -59,10 +59,14 @@ class FacebookFeed_Page extends DataObject {
 				</ol>"
 			)
 		);
+		$fields->addFieldToTab(
+			"Root.Pages",
+			new TreeMultiSelectField("Pages", "Show on", "SiteTree")
+		);
 		$pages = $this->Pages();
 		if($pages && $pages->count()) {
 			foreach($pages as $page) {
-				$links[] = "<li><a href=\"".$page->Link("updatefb")."\">".$page->Title."</li>";
+				$links[] = "<li><a href=\"".$page->Link("updatefb")."\">".$page->Title."</a></li>";
 			}
 			$fields->addFieldToTab(
 				"Root.Pages",
@@ -76,10 +80,6 @@ class FacebookFeed_Page extends DataObject {
 				)
 			);
 		}
-		$fields->addFieldToTab(
-			"Root.Pages",
-			new TreeMultiSelectField("Pages", "Show on", "SiteTree")
-		);
 		return $fields;
 	}
 
