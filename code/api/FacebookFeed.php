@@ -59,6 +59,23 @@ class FacebookFeed_Page extends DataObject {
 				</ol>"
 			)
 		);
+		$pages = $this->Pages();
+		if($pages && $pages->count()) {
+			foreach($pages as $page) {
+				$links[] = "<li><a href=\"".$page->Link("updatefb")."\">".$page->Title."</li>";
+			}
+			$fields->addFieldToTab(
+				"Root.Main",
+				new LiteralField(
+					"LinksToCheck",
+					"<p>
+						Choose the links below to view update data:
+					<ol>
+						".implode("", $links)."
+					</ol>"
+				)
+			);
+		}
 		$fields->addFieldToTab(
 			"Root.Pages",
 			new TreeMultiSelectField("Pages", "Show on", "SiteTree")
