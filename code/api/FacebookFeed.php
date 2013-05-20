@@ -65,7 +65,7 @@ class FacebookFeed_Page extends DataObject {
 				$links[] = "<li><a href=\"".$page->Link("updatefb")."\">".$page->Title."</li>";
 			}
 			$fields->addFieldToTab(
-				"Root.Main",
+				"Root.Pages",
 				new LiteralField(
 					"LinksToCheck",
 					"<p>
