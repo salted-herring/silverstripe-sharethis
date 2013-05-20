@@ -45,16 +45,16 @@ class FacebookFeed_Page extends DataObject {
 			new LiteralField(
 				"HowToFindRSS",
 				"<p>
-				The facebook RSS link format is like this https://www.facebook.com/feeds/page.php?format=rss20&id=
-				To find the id value, you can follow those steps :</p>
+				The facebook RSS link format is like this https://www.facebook.com/feeds/page.php?format=rss20&id=XXX
+				To find the id value, you can follow these steps :</p>
 				<ol>
-					<li>Go to facebook</li>
+					<li>Open a new tab and open <a href=\"http://www.facebook.com\" target=\"_blank\">facebook</a></li>
 					<li>Find your page (e.g. https://www.facebook.com/EOSAsia)</li>
 					<li>Note the name (e.g. EOSAsia)</li>
 					<li>Go to <a href=\"http://findmyfacebookid.com\">http://findmyfacebookid.com</a></li>
 					<li>Enter http://www.facebook.com/EOSAsia</li>
 					<li>You'll get the answer (e.g. 357864420974239)</li>
-					<li>The result link is https://www.facebook.com/feeds/page.php?format=rss20&id=357864420974239</li>
+					<li>Add this ID to the link - like so: https://www.facebook.com/feeds/page.php?format=rss20&id=357864420974239</li>
 				</ol>"
 			)
 		);
