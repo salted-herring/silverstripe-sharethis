@@ -146,7 +146,7 @@ class ShareThisOptions extends Object {
 		//"url" => "http://tapiture.com/bookmarklet/image?img_src=[IMAGE]&page_url=[URL]&page_title=[TITLE]&img_title=[TITLE]&img_width=[IMG WIDTH]img_height=[IMG HEIGHT]";
 		//"title" => "Thumblr"),
 "thumbler" => array(
-		"url" => "http://www.tumblr.com/share/link?url=".htmlentities(self::$encoded_page_url."&name=".self::$encoded_page_title);
+		"url" => "http://www.tumblr.com/share/link?url=".htmlentities(self::$encoded_page_url."&name=".self::$encoded_page_title),
 		"title" => "Thumblr"),
 "yahoo" => array(
 	 "url" =>  "http://bookmarks.yahoo.com/toolbar/savebm?u=".htmlentities("u=".self::$encoded_page_url."&t=".self::$encoded_page_title),
