@@ -3,6 +3,7 @@
 /**
  * @author romain [at] sunnys side up .co.nz + nicolaas [at] sunny side up . co .nz
  * @inspiration: https://github.com/tylerkidd/silverstripe-twitter-feed/
+ * @funding: MSO Design (www.msodesign.com)
  *
  **/
 
