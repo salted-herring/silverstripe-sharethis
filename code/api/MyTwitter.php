@@ -103,8 +103,7 @@ class MyTwitter extends Object {
 				if(++$i > $count) break;
 				$date = new SS_Datetime();
 				$date->setValue(strtotime($tweet->created_at));
-				$text = $tweet->text;
-				$serialisedTweet = serialize($tweet);
+				$text = htmlentities($tweet->text, ENT_NOQUOTES, $encoding = null, $doubleEncode = false);
 				if($tweet->entities && $tweet->entities->urls){
 					foreach($tweet->entities->urls as $url){
 						$text = str_replace($url->url, '<a href="'.$url->url.'" class="external">'.$url->url.'</a>',$text);
