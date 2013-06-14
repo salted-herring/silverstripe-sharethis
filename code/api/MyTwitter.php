@@ -2,7 +2,7 @@
 
 /**
  * @author romain [at] sunnys side up .co.nz + nicolaas [at] sunny side up . co .nz
- * @source: https://github.com/tylerkidd/silverstripe-twitter-feed/
+ * @inspiration: https://github.com/tylerkidd/silverstripe-twitter-feed/
  *
  **/
 
