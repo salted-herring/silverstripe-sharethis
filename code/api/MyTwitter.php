@@ -9,7 +9,9 @@
 
 class MyTwitter extends Object {
 
-	private static $singleton = null;
+	private static $debug = false;
+
+	private static $singletons = array();
 
 	/**
 	 * returns a DataObjetSet of the last $count tweets.
@@ -19,17 +21,16 @@ class MyTwitter extends Object {
 	 * @param Int $count - number of tweets to retrieve at any one time
 	 * @return DataObjectSet | Null
 	 */
-	public static function last_statuses($username, $count = 1) {
+	public static function last_statuses($username, $count = 1, $useHourlyCache = true) {
 		$sessionName = "MyTwitterFeeds$username".date("Ymdh");
-		if(Session::get($sessionName)){
+		if(Session::get($sessionName) && $useHourlyCache){
 			//do nothing
 		}
 		else {
-			Session::set($sessionName, 1);
-			if( ! self::$singleton) {
-				self::$singleton = new MyTwitter($username, $count);
+			if( empty(self::$singletons[$username])) {
+				self::$singletons[$username] = new MyTwitter($username, $count);
 			}
-			$dataObjectSet = self::$singleton->TwitterFeed($username, $count);
+			$dataObjectSet = self::$singletons[$username]->TwitterFeed($username, $count);
 			if($dataObjectSet && $dataObjectSet->count()) {
 				foreach($dataObjectSet as $tweet) {
 					if(!DataObject::get_one("MyTwitterData", "\"TwitterID\" = '".$tweet->ID."'")) {
@@ -41,6 +42,7 @@ class MyTwitter extends Object {
 					}
 				}
 			}
+			Session::set($sessionName, 1);
 		}
 		return DataObject::get("MyTwitterData", "\"Hide\" = 0", null, null, "0, $count");
 	}
@@ -79,8 +81,9 @@ class MyTwitter extends Object {
 		//check settings are available
 		$requiredSettings = array("twitter_consumer_key", "twitter_consumer_secret", "titter_oauth_token", "titter_oauth_token");
 		foreach($requiredSettings as $setting) {
-			if(empty(self::$setting)) {
-				user_error(" you must set MyTwitter::$setting", E_USER_NOTICE);
+
+			if(empty(self::$$setting)) {
+				user_error(" you must set MyTwitter::$setting".self::$$setting, E_USER_NOTICE);
 				return null;
 			}
 		}
@@ -94,7 +97,9 @@ class MyTwitter extends Object {
 		$config = self::$twitter_config;
 		$config['screen_name'] = $username;
 		$tweets = $connection->get('statuses/user_timeline', $config);
-
+		if(self::$debug){
+			print_r($tweets);
+		}
 		$tweetList = new DataObjectSet();
 
 		if(count($tweets) > 0 && !isset($tweets->error)){
@@ -103,10 +108,12 @@ class MyTwitter extends Object {
 				if(++$i > $count) break;
 				$date = new SS_Datetime();
 				$date->setValue(strtotime($tweet->created_at));
-				$text = htmlentities($tweet->text, ENT_NOQUOTES, $encoding = null, $doubleEncode = false);
-				if($tweet->entities && $tweet->entities->urls){
+				$text = htmlentities($tweet->text, ENT_NOQUOTES, $encoding = "UTF-8", $doubleEncode = false);
+				if(!empty($tweet->entities) && !empty($tweet->entities->urls)){
 					foreach($tweet->entities->urls as $url){
-						$text = str_replace($url->url, '<a href="'.$url->url.'" class="external">'.$url->url.'</a>',$text);
+						if(!empty($url->url) && !empty($url->display_url)) {
+							$text = str_replace($url->url, '<a href="'.$url->url.'" class="external">'.$url->display_url.'</a>',$text);
+						}
 					}
 				}
 				$tweetList->push(
@@ -127,7 +134,7 @@ class MyTwitterData extends DataObject {
 	static $db = array(
 		"Date" => "SS_Datetime",
 		"TwitterID" => "Varchar(64)",
-		"Title" => "Varchar",
+		"Title" => "HTMLText",
 		"Hide" => "Boolean"
 	);
 
@@ -136,5 +143,9 @@ class MyTwitterData extends DataObject {
 	);
 
 	static $default_sort = "\"Date\" DESC";
+
+	function forTemplate(){
+		return $this->Title;
+	}
 
 }
