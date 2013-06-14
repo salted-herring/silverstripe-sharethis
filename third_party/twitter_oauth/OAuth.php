@@ -1,5 +1,13 @@
 <?php
 // vim: foldmethod=marker
+/**
+ *
+ *
+ *
+ *
+ *
+ * @source: https://github.com/tylerkidd/silverstripe-twitter-feed/
+ */
 
 /* Generic exception class
  */
@@ -871,4 +879,4 @@ class OAuthUtil {
   }
 }
 
-?>
+
