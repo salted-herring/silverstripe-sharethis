@@ -27,4 +27,13 @@ define('SS_SHARETHIS_DIR', 'sharethis');
 //optional//requires: http://sunny.svnrepository.com/svn/sunny-side-up-general/dataobjectsorter
 //Object::add_extension('ShareThisDataObject', 'DataObjectSorterDOD');
 //Object::add_extension('SocialNetworkingLinksDataObject', 'DataObjectSorterDOD');
+
+
+//TWITTER FEED:
+//MyTwitter::set_twitter_consumer_key($string);
+//MyTwitter::set_twitter_consumer_secret($string);
+//MyTwitter::set_titter_oauth_token($string);
+//MyTwitter::set_titter_oauth_token_secret($string);
+//MyTwitter::set_twitter_config($array);
+
 //===================---------------- END sharethis MODULE ----------------===================

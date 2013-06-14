@@ -78,7 +78,7 @@ class ShareThisOptions extends Object {
 	 "title" => "Furl this"),
 "google" => array(
 	 "url" =>  "http://www.google.com/bookmarks/mark?".htmlentities("op=edit&bkmk=".self::$encoded_page_url."&title=".self::$encoded_page_title."&annotation=".self::$encoded_description),
-	 "title" => "Google Bookmark this post"),				 
+	 "title" => "Google Bookmark this post"),
 "googleplus" => array(
 	 "url" =>  "https://plus.google.com/share?url=".self::$encoded_page_url,
 	 "title" => "Google Plus One"),
