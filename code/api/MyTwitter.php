@@ -13,17 +13,19 @@ class MyTwitter extends Object {
 
 	/**
 	 * returns a DataObjetSet of the last $count tweets.
+	 * - saves twitter feed to dataobject
 	 *
 	 * @param String $username (e.g. mytwitterhandle)
 	 * @param Int $count - number of tweets to retrieve at any one time
 	 * @return DataObjectSet | Null
 	 */
 	public static function last_statuses($username, $count = 1) {
-		$sessionName = "MyTwitterFeeds".date("Ymdh");
-		if($retrievedRecently = Session::get($sessionName)){
+		$sessionName = "MyTwitterFeeds$username".date("Ymdh");
+		if(Session::get($sessionName)){
 			//do nothing
 		}
 		else {
+			Session::set($sessionName, 1);
 			if( ! self::$singleton) {
 				self::$singleton = new MyTwitter($username, $count);
 			}
@@ -67,7 +69,7 @@ class MyTwitter extends Object {
 		protected static function get_twitter_config() {return self::$twitter_config;}
 
 	/**
-	 *
+	 * retries latest tweets from Twitter
 	 *
 	 * @param String $username (e.g. mytwitterhandle)
 	 * @param Int $count - number of tweets to retrieve at any one time
