@@ -247,6 +247,17 @@ class FacebookFeed_Item_Communicator extends RestfulServer {
 		$string= preg_replace($unsafe, " ", $string);
 		return $string;
 	}
+}
 
+class FacebookFeed_UpdateTask extends HourlyTask {
 
+	function process() {
+		$facebookPages = DataObject::get('FacebookFeed_Page');
+		if($facebookPages && $facebookPages->Count()) {
+			foreach($facebookPages as $facebookPage) {
+				$facebookPage->Fetch();
+				DB::alteration_message("Facebook page #{$facebookPage->ID} '$facebookPage->Title' updated", 'changed');
+			}
+		}
+	}
 }
