@@ -25,7 +25,7 @@
 class FacebookFeed_Page extends DataObject {
 
 	static $db = array(
-		"Title" => "Varchar(244)",
+		'Title' => 'Varchar(244)',
 		'RSSURL' => 'Varchar(255)'
 	);
 
@@ -37,6 +37,20 @@ class FacebookFeed_Page extends DataObject {
 		'Pages' => 'SiteTree'
 	);
 
+	/**
+	 * Standard SS Variable
+	 * @var String
+	 **/
+	public static $singular_name = "Facebook Feed";
+		function i18n_singular_name() { return _t("FacebookFeed.SINGULAR", "Facebook Feed");}
+
+	/**
+	 * Standard SS Variable
+	 * @var String
+	 **/
+	public static $plural_name = "Facebook Feeds";
+		function i18n_plural_name() { return _t("FacebookFeed.PLURAL", "Facebook Feeds");}
+
 	public function getCMSFields(){
 		$fields = parent::getCMSFields();
 		$fields->addFieldToTab(
@@ -45,7 +59,7 @@ class FacebookFeed_Page extends DataObject {
 				"HowToFindRSS",
 				"<p>
 				The facebook RSS link format is like this https://www.facebook.com/feeds/page.php?format=rss20&id=XXX
-				To find the id value, you can follow these steps :</p>
+				To find the id value (denoted here as XXX), you can follow these steps :</p>
 				<ol>
 					<li>Open a new tab and open <a href=\"http://www.facebook.com\" target=\"_blank\">facebook</a></li>
 					<li>Find your page (e.g. https://www.facebook.com/EOSAsia)</li>
@@ -125,6 +139,11 @@ class FacebookFeed_Page extends DataObject {
 		}
 	}
 
+	function onAfterWrite(){
+		parent::onAfterWrite();
+		$this->Fetch();
+	}
+
 }
 
 class FacebookFeed_Item extends DataObject {
@@ -141,19 +160,32 @@ class FacebookFeed_Item extends DataObject {
 		"Date" => "Date"
 	);
 
-	static $summary_fields = array(
-		"Title" => "Title",
-		"KeepOnTop" => "KeepOnTop",
-		"Hide" => "Hide",
-	);
-
 
 	static $has_one = array(
 		"FacebookFeed_Page" => "FacebookFeed_Page"
 	);
 
+	static $summary_fields = array(
+		"TitleOrDescription" => "Title",
+		"KeepOnTopNice" => "Keep On Top",
+		"HideNice" => "Hide",
+	);
+
+
+	static $field_labels = array(
+		"FacebookFeed_Page" => "Facebook Feed",
+		"DescriptionWithShortLinks" => "Description with short links"
+	);
+
+
 	static $indexes = array(
 		"UID" => true
+	);
+
+	static $casting = array(
+		'TitleOrDescription' => 'Varchar',
+		'KeepOnTopNice' => 'Varchar',
+		'HideNice' => 'Varchar'
 	);
 
 	function canDelete($member = null) {
@@ -166,7 +198,19 @@ class FacebookFeed_Item extends DataObject {
 
 	static $default_sort = "\"Hide\" ASC, \"KeepOnTop\" DESC, \"Date\" DESC";
 
-	function createDescriptionWithShortLinks() {
+	function getTitleOrDescription(){
+		return strlen($this->Title) > 2 ? $this->Title ."...": substr(strip_tags($this->Description), 0, 100)." ... ";
+	}
+
+	function getKeepOnTopNice(){
+		return $this->KeepOnTop ? "YES" : "NO";
+	}
+
+	function getHideNice(){
+		return $this->Hide ? "YES" : "NO";
+	}
+
+	protected function myDescriptionWithShortLinks() {
 		$html = str_get_html($this->Description);
 		foreach($html->find('text') as $element) {
 			if(! in_array($element->parent()->tag, array('a', 'img'))) {
@@ -179,10 +223,9 @@ class FacebookFeed_Item extends DataObject {
 
 	function onBeforeWrite(){
 		parent::onBeforeWrite();
-		if(!$this->Title) {
-			$this->Title = strip_tags($this->Description);
+		if(!$this->DescriptionWithShortLinks) {
+			$this->DescriptionWithShortLinks = (string) $this->myDescriptionWithShortLinks();
 		}
-		$this->DescriptionWithShortLinks = $this->createDescriptionWithShortLinks();
 	}
 
 
