@@ -21,7 +21,6 @@
  *
  **/
 
-require_once('simple_html_dom.php');
 
 class FacebookFeed_Page extends DataObject {
 
@@ -134,13 +133,13 @@ class FacebookFeed_Item extends DataObject {
 		"KeepOnTop" => "Boolean",
 		"Hide" => "Boolean",
 		"UID" => "varchar(32)",
-		"Title" => "varchar(255)",
+		"Title" => "varchar(100)",
 		"Author" => "Varchar(244)",
 		"Description" => "HTMLText",
+		"DescriptionWithShortLinks" => "HTMLText",
 		"Link" => "Varchar(244)",
 		"Date" => "Date"
 	);
-
 
 	static $summary_fields = array(
 		"Title" => "Title",
@@ -157,10 +156,6 @@ class FacebookFeed_Item extends DataObject {
 		"UID" => true
 	);
 
-	static $casting = array(
-		'DescriptionWithShortLinks' => 'HTMLText'
-	);
-
 	function canDelete($member = null) {
 		return false;
 	}
@@ -171,7 +166,7 @@ class FacebookFeed_Item extends DataObject {
 
 	static $default_sort = "\"Hide\" ASC, \"KeepOnTop\" DESC, \"Date\" DESC";
 
-	function DescriptionWithShortLinks() {
+	function createDescriptionWithShortLinks() {
 		$html = str_get_html($this->Description);
 		foreach($html->find('text') as $element) {
 			if(! in_array($element->parent()->tag, array('a', 'img'))) {
@@ -181,20 +176,31 @@ class FacebookFeed_Item extends DataObject {
 		}
 		return $html;
 	}
+
+	function onBeforeWrite(){
+		parent::onBeforeWrite();
+		if(!$this->Title) {
+			$this->Title = strip_tags($this->Description);
+		}
+		$this->DescriptionWithShortLinks = $this->createDescriptionWithShortLinks();
+	}
+
+
+
 }
 
 
 class FacebookFeed_Item_Communicator extends RestfulServer {
 
 	/**
-	 * cd
-	 **/
-
+	 *
+	 */
 	function fetchFBFeed($url, $maxnumber = 1, $facebookFeed_PageID = 0, $timeFormat = 'Y-m-d') {
+		require_once('simple_html_dom.php');
 	/* The following line is absolutely necessary to read Facebook feeds.
 	 * Facebook will not recognize PHP as a browser and therefore won't fetch anything.
 	 * So we define a browser here */
-	 ini_set('user_agent', 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9.1.3) Gecko/20090824 Firefox/3.5.3');
+		ini_set('user_agent', 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9.1.3) Gecko/20090824 Firefox/3.5.3');
 		$updates = @simplexml_load_file($url);  //Load feed with simplexml
 		if($updates){
 			foreach ( $updates->channel->item as $fbUpdate ) {
