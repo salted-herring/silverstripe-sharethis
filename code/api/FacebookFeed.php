@@ -203,6 +203,7 @@ class FacebookFeed_Item extends DataObject {
 	}
 
 	function getKeepOnTopNice(){
+		if($this->Hide) { return "N/A";}
 		return $this->KeepOnTop ? "YES" : "NO";
 	}
 
