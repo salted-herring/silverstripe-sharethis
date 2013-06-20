@@ -80,7 +80,7 @@ class FacebookFeed_Page extends DataObject {
 		if($pages && $pages->count()) {
 			$links = array();
 			foreach($pages as $page) {
-				$links[] = "<li><a href=\"".$page->Link("updatefb")."\">".$page->Title."</a></li>";
+				$links[] = "<li><a href=\"".$page->Link()."\">".$page->Title."</a></li>";
 			}
 			if(count($links)) {
 				$fields->addFieldToTab(
