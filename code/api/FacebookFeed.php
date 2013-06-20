@@ -212,6 +212,7 @@ class FacebookFeed_Item extends DataObject {
 	}
 
 	protected function myDescriptionWithShortLinks() {
+		require_once('simple_html_dom.php');
 		$html = str_get_html($this->Description);
 		foreach($html->find('text') as $element) {
 			if(! in_array($element->parent()->tag, array('a', 'img'))) {
