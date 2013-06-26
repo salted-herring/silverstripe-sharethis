@@ -23,7 +23,7 @@ class MyTwitter extends Object {
 	 */
 	public static function last_statuses($username, $count = 1, $useHourlyCache = true) {
 		$sessionName = "MyTwitterFeeds$username".date("Ymdh");
-		if(Session::get($sessionName) && $useHourlyCache){
+		if(Session::get($sessionName) && $useHourlyCache && !self::$debug){
 			//do nothing
 		}
 		else {
@@ -97,14 +97,13 @@ class MyTwitter extends Object {
 		$config = self::$twitter_config;
 		$config['screen_name'] = $username;
 		$tweets = $connection->get('statuses/user_timeline', $config);
-		if(self::$debug){
-			print_r($tweets);
-		}
 		$tweetList = new DataObjectSet();
-
 		if(count($tweets) > 0 && !isset($tweets->error)){
 			$i = 0;
 			foreach($tweets as $tweet){
+				if(self::$debug){
+					print_r($tweet);
+				}
 				if(++$i > $count) break;
 				$date = new SS_Datetime();
 				$date->setValue(strtotime($tweet->created_at));
