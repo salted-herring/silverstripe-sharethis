@@ -228,6 +228,7 @@ class FacebookFeed_Item extends DataObject {
 		if(!$this->DescriptionWithShortLinks) {
 			$this->DescriptionWithShortLinks = (string) $this->myDescriptionWithShortLinks();
 		}
+		$this->extend("updatepage");
 	}
 
 
