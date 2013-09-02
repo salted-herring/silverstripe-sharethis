@@ -22,6 +22,9 @@ class MyTwitter extends Object {
 	 * @return DataObjectSet | Null
 	 */
 	public static function last_statuses($username, $count = 1, $useHourlyCache = true) {
+		if(!$username) {
+			user_error("No username provided");
+		}
 		$sessionName = "MyTwitterFeeds$username".date("Ymdh");
 		if(Session::get($sessionName) && $useHourlyCache && !self::$debug){
 			//do nothing
@@ -78,12 +81,15 @@ class MyTwitter extends Object {
 	 * @return DataObjectSet | Null
 	 */
 	public function TwitterFeed($username, $count = 5){
+		if(!$username) {
+			user_error("No username provided");
+		}
 		//check settings are available
 		$requiredSettings = array("twitter_consumer_key", "twitter_consumer_secret", "titter_oauth_token", "titter_oauth_token");
 		foreach($requiredSettings as $setting) {
 
 			if(empty(self::$$setting)) {
-				user_error(" you must set MyTwitter::$setting".self::$$setting, E_USER_NOTICE);
+				user_error(" you must set MyTwitter::$setting", E_USER_NOTICE);
 				return null;
 			}
 		}
