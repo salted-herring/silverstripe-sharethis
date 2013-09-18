@@ -47,6 +47,7 @@ class MyTwitter extends Object {
 			}
 			Session::set($sessionName, 1);
 		}
+		MyTwitterData::set_username($username);
 		return DataObject::get("MyTwitterData", "\"Hide\" = 0", null, null, "0, $count");
 	}
 
@@ -84,10 +85,10 @@ class MyTwitter extends Object {
 		if(!$username) {
 			user_error("No username provided");
 		}
+		MyTwitterData::set_username($username);
 		//check settings are available
 		$requiredSettings = array("twitter_consumer_key", "twitter_consumer_secret", "titter_oauth_token", "titter_oauth_token");
 		foreach($requiredSettings as $setting) {
-
 			if(empty(self::$$setting)) {
 				user_error(" you must set MyTwitter::$setting", E_USER_NOTICE);
 				return null;
@@ -136,6 +137,9 @@ class MyTwitter extends Object {
 
 class MyTwitterData extends DataObject {
 
+	private static $username = "";
+		public static function set_username($s){self::$username = $s;}
+
 	static $db = array(
 		"Date" => "SS_Datetime",
 		"TwitterID" => "Varchar(64)",
@@ -147,10 +151,18 @@ class MyTwitterData extends DataObject {
 		"TwitterID" => true
 	);
 
+	static $casting = array(
+		"Link" => "Varchar"
+	);
+
 	static $default_sort = "\"Date\" DESC";
 
 	function forTemplate(){
 		return $this->Title;
+	}
+
+	function Link(){
+		return "https://twitter.com/".self::$username."/status/".$this->TwitterID;
 	}
 
 }
