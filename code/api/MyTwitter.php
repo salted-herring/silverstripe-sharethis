@@ -13,6 +13,12 @@ class MyTwitter extends Object {
 
 	private static $singletons = array();
 
+	private static $favourites_only = false;
+		public static function set_favourites_only($b){self::$favourites_only = $b;}
+
+	private static $non_replies_only = false;
+		public static function set_non_replies_only($b){self::$non_replies_only = $b;}
+
 	/**
 	 * returns a DataObjetSet of the last $count tweets.
 	 * - saves twitter feed to dataobject
@@ -108,10 +114,13 @@ class MyTwitter extends Object {
 		if(count($tweets) > 0 && !isset($tweets->error)){
 			$i = 0;
 			foreach($tweets as $tweet){
+				if(self::$favourites_only && $tweet->favorite_count == 0 ) break;
+				if(self::$non_replies_only && $tweet->in_reply_to_status_id) break;
 				if(self::$debug){
 					print_r($tweet);
 				}
 				if(++$i > $count) break;
+
 				$date = new SS_Datetime();
 				$date->setValue(strtotime($tweet->created_at));
 				$text = htmlentities($tweet->text, ENT_NOQUOTES, $encoding = "UTF-8", $doubleEncode = false);
