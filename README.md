@@ -1,7 +1,5 @@
-###############################################
 ShareThis
-Pre 0.1 proof of concept
-###############################################
+================================================================================
 
 Developer
 -----------------------------------------------
@@ -9,7 +7,7 @@ Nicolaas Francken [at] sunnysideup.co.nz
 
 Requirements
 -----------------------------------------------
-SilverStripe 2.3.0 or greater.
+see composer.json
 HIGHLY RECOMMENDED:
 http://sunny.svnrepository.com/svn/sunny-side-up-general/dataobjectsorter
 
