@@ -24,7 +24,6 @@ define('SS_SHARETHIS_DIR', 'sharethis');
 //Object::add_extension('SiteTree', 'SocialNetworksSTE');
 
 // --- SORTING -> allow the links to social media to be sortable
-//optional//requires: http://sunny.svnrepository.com/svn/sunny-side-up-general/dataobjectsorter
 //Object::add_extension('ShareThisDataObject', 'DataObjectSorterDOD');
 //Object::add_extension('SocialNetworkingLinksDataObject', 'DataObjectSorterDOD');
 //===================---------------- END sharethis MODULE ----------------===================
