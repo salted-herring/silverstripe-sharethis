@@ -118,15 +118,21 @@ class ShareThisSTE extends SiteTreeExtension {
 		$icons = array();
 		if($bookmarks) {
 			$useFontAwesome = Config::inst()->get("ShareThisSTE", "use_font_awesome");
-			Requirements::themedCSS('SocialNetworking', "sharethis"); // ALSO  added in template
+// 			Requirements::themedCSS('SocialNetworking', "sharethis"); // ALSO  added in template
+/*
 			if($useFontAwesome) {
 				Requirements::css("http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css");
 			}
+*/
+/*
 			Requirements::javascript(FRAMEWORK_DIR . '/thirdparty/jquery/jquery.js');
 			Requirements::javascript(SS_SHARETHIS_DIR . '/javascript/shareThis.js');
+*/
+/*
 			if(Config::inst()->get("ShareThisSTE", "use_bw_effect")) {
 				Requirements::customScript('sharethis.set_use_BW(true);', 'ShareThisBWEffect');
 			}
+*/
 			foreach($bookmarks as $key => $bookmark) {
 				if(isset($bookmark['title']) && isset($bookmark['url'])) {
 					$icon = array(
