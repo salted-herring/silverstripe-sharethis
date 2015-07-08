@@ -81,6 +81,7 @@ class ShareThisSTE extends SiteTreeExtension {
 	function ShowShareIcons() {
 		if($this->applyToOwnerClass()) {
 			$config = $this->owner->getSiteConfig();
+			
 			if($config->AlwaysIncludeShareThisLinks) {
 				return true;
 			}
